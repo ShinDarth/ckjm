@@ -195,13 +195,12 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 	cm.setCbo(efferentCoupledClasses.size());
 	cm.setRfc(responseSet.size());
         
-        System.out.println("********************************************");
-        
+        System.out.println("\nClass \""+myClassName+"\"\n");
         Iterator<String> itr = responseSet.iterator();
         while (itr.hasNext())
             System.out.println(itr.next());
         
-        System.out.println("********************************************\n\n");
+        System.out.println("\n********************************************\n");
         
 	/*
 	 * Calculate LCOM  as |P| - |Q| if |P| - |Q| > 0 or 0 otherwise
