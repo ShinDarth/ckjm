@@ -41,7 +41,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
     private String myClassName;
     /** The container where metrics for all classes are stored. */
     private ClassMetricsContainer cmap;
-    /** The emtrics for the class being visited. */
+    /** The metrics for the class being visited. */
     private ClassMetrics cm;
     /* Classes encountered.
      * Its cardinality is used for calculating the CBO.
