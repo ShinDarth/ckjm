@@ -57,7 +57,9 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
      * intersection in O(n) instead of O(n*n).
      */
     ArrayList<TreeSet<String>> mi = new ArrayList<TreeSet<String>>();
-
+    
+    private String fetchMethods = "";
+    
     public ClassVisitor(JavaClass jc, ClassMetricsContainer classMap) {
 	visitedClass = jc;
 	cp = new ConstantPoolGen(visitedClass.getConstantPool());
@@ -148,6 +150,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
         String args = argumentList.substring(1, argumentList.length() - 1);
         String signature = className + "." + methodName + "(" + args + ")";
         responseSet.add(signature);
+        fetchMethods += signature+"\n";
     }
 
     /** Called when a method invocation is encountered. */
@@ -195,12 +198,8 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 	cm.setCbo(efferentCoupledClasses.size());
 	cm.setRfc(responseSet.size());
         
-        System.out.println("\nClass \""+myClassName+"\"\n");
-        Iterator<String> itr = responseSet.iterator();
-        while (itr.hasNext())
-            System.out.println(itr.next());
-        
-        System.out.println("\n********************************************\n");
+        // TODO: salvare i dati in memoria per poi elaborarli.
+        // myClassName; fetchMethods
         
 	/*
 	 * Calculate LCOM  as |P| - |Q| if |P| - |Q| > 0 or 0 otherwise
