@@ -58,7 +58,9 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
      */
     ArrayList<TreeSet<String>> mi = new ArrayList<TreeSet<String>>();
     
+    // Shin && Giga works
     private String fetchMethods = "";
+    private HashSet<String> uniqueCalledClasses = new HashSet<String>();
     
     public ClassVisitor(JavaClass jc, ClassMetricsContainer classMap) {
 	visitedClass = jc;
@@ -150,6 +152,9 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
         String args = argumentList.substring(1, argumentList.length() - 1);
         String signature = className + "." + methodName + "(" + args + ")";
         responseSet.add(signature);
+        
+        // Shin && Giga works
+        uniqueCalledClasses.add(className);
         fetchMethods += signature+"\n";
     }
 
@@ -198,8 +203,25 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 	cm.setCbo(efferentCoupledClasses.size());
 	cm.setRfc(responseSet.size());
         
-        // TODO: salvare i dati in memoria per poi elaborarli.
-        // myClassName; fetchMethods
+        // Shin && Giga works
+        
+        CalledClass ClassesWhichICall[] = new CalledClass[uniqueCalledClasses.size()];
+        
+        // assign class names
+        Iterator<String> itr = uniqueCalledClasses.iterator();
+        for (int i = 0; i < ClassesWhichICall.length; i ++)
+            ClassesWhichICall[i] = new CalledClass(itr.next());
+        
+        // assign methods to each called class
+        assignMethods(fetchMethods, ClassesWhichICall);
+        
+        // CHECK IF EVERYTHING WORKS!
+        System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
+        for (int i = 0; i < ClassesWhichICall.length; i ++)
+        {
+            System.out.println(ClassesWhichICall[i].toString());
+        }
+        System.out.println("\n");
         
 	/*
 	 * Calculate LCOM  as |P| - |Q| if |P| - |Q| > 0 or 0 otherwise
@@ -219,5 +241,38 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 		    lcom--;
 	    }
 	cm.setLcom(lcom > 0 ? lcom : 0);
+    }
+    
+    // assign each method to its owner called class
+    public void assignMethods(String str, CalledClass[] calledClasses)
+    {
+        int start = 0, methodNameStart, endLine = 0;
+        
+        while (start < str.length())
+        {
+            int calledClassIdx = 0;
+            
+            // endLine will be the end of the current line
+            while (str.charAt(endLine) != '\n') endLine++;
+            
+            // methodNameStart is the " . " before the method name starts
+            methodNameStart = endLine;
+            while (str.charAt(methodNameStart) != '(')  methodNameStart--;
+            while (str.charAt(methodNameStart) != '.')  methodNameStart--;
+            
+            for (int i = 0; i < calledClasses.length; i++)
+            {
+                if (str.substring(start, methodNameStart).equals(calledClasses[i].getClassName()))
+                {
+                    calledClassIdx = i;
+                    break;
+                }
+            }
+
+            calledClasses[calledClassIdx].addMethod(str.substring(methodNameStart+1, endLine));
+            
+            // start will point at the next line
+            start = ++endLine;
+        }
     }
 }
