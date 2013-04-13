@@ -63,13 +63,14 @@ public class MetricsFilter {
 	    clspec = clspec.substring(spc + 1);
 	    try {
 		jc = new ClassParser(jar, clspec).parse();
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 		System.err.println("Error loading " + clspec + " from " + jar + ": " + e);
 	    }
 	} else {
 	    try {
+                
 		jc = new ClassParser(clspec).parse();
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 		System.err.println("Error loading " + clspec + ": " + e);
 	    }
 	}
