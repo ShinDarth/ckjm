@@ -34,11 +34,22 @@ public class CalledClass
     }
     
     public String getClassName() { return className; }
+    
+    public int getCalledMethodsCount()
+    {
+        int count = 0;
+        Iterator itr = myMethods.values().iterator();
+        
+        while (itr.hasNext())
+            count += (int)itr.next();
+        
+        return count;
+    }
 
     @Override
     public String toString()
     {
-        String str = "Class name: "+className+"\n";
+        String str = "Class name: "+className+" called methods amount: "+getCalledMethodsCount()+"\n";
         
         str+="Methods: "+myMethods.toString()+"\n";
         
