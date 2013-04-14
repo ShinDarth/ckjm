@@ -35,7 +35,17 @@ class ClassMetricsContainer {
 
     /** The map from class names to the corresponding metrics */
     private HashMap<String, ClassMetrics> m = new HashMap<String, ClassMetrics>();
-
+    
+    // Shin && Giga works {{{
+    private String packageName;
+    private boolean ShinAndGigaEnabled = false;
+    
+    public String getPackageName()          { return packageName; }
+    public void setPackageName(String str)  { packageName = str; }
+    public boolean ShinAndGigaWorks()       { return ShinAndGigaEnabled; }
+    public void enableShinAndGiga()         { ShinAndGigaEnabled = true; }
+    // Shin && Giga works }}}
+    
     /** Return a class's metrics */
     public ClassMetrics getMetrics(String name) {
 	ClassMetrics cm = m.get(name);

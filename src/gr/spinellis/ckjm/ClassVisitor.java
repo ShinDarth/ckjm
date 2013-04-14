@@ -203,26 +203,40 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 	cm.setCbo(efferentCoupledClasses.size());
 	cm.setRfc(responseSet.size());
         
-        // Shin && Giga works
-        
-        CalledClass ClassesWhichICall[] = new CalledClass[uniqueCalledClasses.size()];
-        
-        // assign class names
-        Iterator<String> itr = uniqueCalledClasses.iterator();
-        for (int i = 0; i < ClassesWhichICall.length; i ++)
-            ClassesWhichICall[i] = new CalledClass(itr.next());
-        
-        // assign methods to each called class
-        assignMethods(fetchMethods, ClassesWhichICall);
-        
-        // CHECK IF EVERYTHING WORKS!
-        System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
-        for (int i = 0; i < ClassesWhichICall.length; i ++)
+        // Shin && Giga works {{{
+        if (cmap.ShinAndGigaWorks())
         {
-            System.out.println(ClassesWhichICall[i].toString());
-        }
-        System.out.println("\n");
-        
+            CalledClass ClassesWhichICall[] = new CalledClass[uniqueCalledClasses.size()];
+
+            // assign class names
+            Iterator<String> itr = uniqueCalledClasses.iterator();
+            for (int i = 0; i < ClassesWhichICall.length; i ++)
+                ClassesWhichICall[i] = new CalledClass(itr.next());
+
+            // assign methods to each called class
+            assignMethods(fetchMethods, ClassesWhichICall);
+
+            // DEBUG
+            System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
+            for (int i = 0; i < ClassesWhichICall.length; i ++)
+            {
+                System.out.println(ClassesWhichICall[i].toString());
+            }
+            //*/
+            
+            String packageName = cmap.getPackageName();
+            int methodsCalledPerPackage = 0;
+
+            for (int i = 0; i < ClassesWhichICall.length; i ++)
+                if (ClassesWhichICall[i].getClassName().startsWith(packageName))
+                    methodsCalledPerPackage += ClassesWhichICall[i].getCalledMethodsCount();
+
+            // DEBUG
+            System.out.println("La classe "+myClassName+" chiama "+methodsCalledPerPackage+" metodi del package "+packageName+"\n\n\n");
+            //*/
+            
+        } // Shin && Giga works }}}
+
 	/*
 	 * Calculate LCOM  as |P| - |Q| if |P| - |Q| > 0 or 0 otherwise
 	 * where

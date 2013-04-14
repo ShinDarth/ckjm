@@ -101,28 +101,54 @@ public class MetricsFilter {
      */
     public static void main(String[] argv) {
 	int argp = 0;
+        ClassMetricsContainer cm = new ClassMetricsContainer();
+        
+        // Shin && Giga works
+        if (argv.length > 0 && argv[argp].equals("-c"))
+        {
+            cm.enableShinAndGiga();
+            argp++;
+            includeJdk = true;
+            onlyPublic = false;
+            
+            String packageName = "";
+            System.out.print("Insert package name: ");
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            try
+            {
+                packageName = in.readLine();
+                in.close();
+            }
+            catch(Exception e)
+            {
+                System.err.println("Error reading line: " + e);
+                    System.exit(1);
+            }
+            cm.setPackageName(packageName);
+        }
+        else // standard ckjm
+        {
+            if (argv.length > argp && argv[argp].equals("-s")) {
+                includeJdk = true;
+                argp++;
+            }
+            if (argv.length > argp && argv[argp].equals("-p")) {
+                onlyPublic = true;
+                argp++;
+            }
 
-	if (argv.length > argp && argv[argp].equals("-s")) {
-	    includeJdk = true;
-	    argp++;
-	}
-	if (argv.length > argp && argv[argp].equals("-p")) {
-	    onlyPublic = true;
-	    argp++;
-	}
-	ClassMetricsContainer cm = new ClassMetricsContainer();
-
-	if (argv.length == argp) {
-	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	    try {
-		String s;
-		while ((s = in.readLine()) != null)
-		    processClass(cm, s);
-	    } catch (Exception e) {
-		System.err.println("Error reading line: " + e);
-		System.exit(1);
-	    }
-	}
+            if (argv.length == argp) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    String s;
+                    while ((s = in.readLine()) != null)
+                        processClass(cm, s);
+                } catch (Exception e) {
+                    System.err.println("Error reading line: " + e);
+                    System.exit(1);
+                }
+            }
+        }
 
 	for (int i = argp; i < argv.length; i++)
 	    processClass(cm, argv[i]);
