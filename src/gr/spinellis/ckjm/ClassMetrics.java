@@ -49,6 +49,16 @@ public class ClassMetrics {
     private boolean isPublicClass;
     /** Coupled classes: classes that use this class */
     private HashSet<String> afferentCoupledClasses;
+    
+    // Shin && Giga works {{{
+    
+    private CalledClass[] classesWhichICall;
+    
+    public void setCalledClasses(CalledClass[] cwIc)    { classesWhichICall = cwIc; }
+    
+    public CalledClass[] getClassesWhichICall()         { return classesWhichICall; }
+    
+    // Shin && Giga works }}}
 
     /** Default constructor. */
     ClassMetrics() {

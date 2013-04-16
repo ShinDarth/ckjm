@@ -215,6 +215,9 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
 
             // assign methods to each called class
             assignMethods(fetchMethods, ClassesWhichICall);
+            
+            // store in its own ClassMetrics
+            cm.setCalledClasses(ClassesWhichICall);
 
             // DEBUG
             System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
