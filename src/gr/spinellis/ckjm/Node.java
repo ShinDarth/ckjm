@@ -15,11 +15,13 @@ public class Node extends SimpleNode {
         super(name);
         nodeList = new ArrayList();
     }
+    
     public ArrayList getArrayList() { return nodeList; }
     
     public void addNode(SimpleNode node) {
         nodeList.add(node);
     }
+    
     public SimpleNode getNode(String n) {
         for(int i = 0; i < nodeList.size(); i++) {
             if(nodeList.get(i) != null && nodeList.get(i).getName().equals(n))

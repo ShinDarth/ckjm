@@ -27,6 +27,7 @@ public class DataHandler {
         }
         return null;
     }
+    
     public Node getClassOfPackage(String p, String c) {
         Node pack = getPackage(p);
         return (Node)pack.getNode(c);
@@ -53,6 +54,7 @@ public class DataHandler {
        }
        return false;
     }
+    
     public SimpleNode getMethodOfClass(String p, String c, String m) {
         Node cl = getClassOfPackage(p,c);
         return cl.getNode(m);
