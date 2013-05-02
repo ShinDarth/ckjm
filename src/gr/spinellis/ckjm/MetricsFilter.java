@@ -152,7 +152,17 @@ public class MetricsFilter {
 
 	for (int i = argp; i < argv.length; i++)
 	    processClass(cm, argv[i]);
-
+        
+        // Shin && Giga works
+        if (cm.ShinAndGigaWorks())
+        {
+            // Organizing all packages/classes/methods called by each visited class
+           CalledClass allCalledClasses[][] = cm.getAllCalledClasses();
+           DataHandler dataHandler = new DataHandler();
+           
+           // TODO: organizzare tutte le classi chiamate (allCalledClasses) dentro il dataHandler
+        }
+        
 	CkjmOutputHandler handler = new PrintPlainResults(System.out);
 	cm.printMetrics(handler);
     }

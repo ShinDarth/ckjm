@@ -16,9 +16,8 @@ public class DataHandler {
 
     ArrayList<PathNode> data;
 
-    public DataHandler(String signature) {
+    public DataHandler() {
         data = new ArrayList();
-
     }
 
     public void addPackage(String p) {

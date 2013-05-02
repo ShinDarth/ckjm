@@ -39,11 +39,30 @@ class ClassMetricsContainer {
     // Shin && Giga works {{{
     private String packageName;
     private boolean ShinAndGigaEnabled = false;
+    private DataHandler dataHandler;
     
-    public String getPackageName()          { return packageName; }
-    public void setPackageName(String str)  { packageName = str; }
-    public boolean ShinAndGigaWorks()       { return ShinAndGigaEnabled; }
-    public void enableShinAndGiga()         { ShinAndGigaEnabled = true; }
+    public String getPackageName()                          { return packageName; }
+    public void setPackageName(String str)                  { packageName = str; }
+    
+    public boolean ShinAndGigaWorks()                       { return ShinAndGigaEnabled; }
+    public void enableShinAndGiga()                         { ShinAndGigaEnabled = true; }
+    
+    public DataHandler dataHandler()                        { return dataHandler; }
+    
+    public CalledClass[][] getAllCalledClasses()
+    {
+        CalledClass allCalledClasses[][] = new CalledClass[m.size()][];
+        Iterator itr = m.values().iterator();
+        int i = 0;
+        
+        while (itr.hasNext())
+        {
+            allCalledClasses[i] = ((ClassMetrics)(itr.next())).getClassesWhichICall();
+            i++;
+        }
+        
+        return allCalledClasses;
+    }
     // Shin && Giga works }}}
     
     /** Return a class's metrics */
