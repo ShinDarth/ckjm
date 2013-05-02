@@ -38,7 +38,7 @@ public class DataHandler {
         return (PathNode)pack.getNode(c);
     }
 
-    public boolean addClasstoPackage(String p, String c) {
+    public boolean addClassToPackage(String p, String c) {
         PathNode pack = getPackage(p);
         PathNode cl = new PathNode(c);
         
@@ -49,7 +49,7 @@ public class DataHandler {
         return false;
     }
 
-    public boolean addMethodtoClass(String p, String c, String m) {
+    public boolean addMethodToClass(String p, String c, String m) {
        PathNode cl = getClassOfPackage(p,c);
        MethodNode method = new MethodNode(m);
        
