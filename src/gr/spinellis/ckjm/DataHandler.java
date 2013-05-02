@@ -33,6 +33,8 @@ public class DataHandler {
         return null;
     }
     
+    public boolean hasPackage(String p) { return getPackage(p) != null; }
+    
     public PathNode getClassOfPackage(String p, String c) {
         PathNode pack = getPackage(p);
         return (PathNode)pack.getNode(c);
@@ -63,5 +65,20 @@ public class DataHandler {
     public MethodNode getMethodOfClass(String p, String c, String m) {
         PathNode cl = getClassOfPackage(p,c);
         return cl.getNode(m);
+    }
+    
+    public void countAll()
+    {
+        // count each package
+        for (int i = 0; i < data.size(); i++)
+        { 
+                ArrayList<MethodNode> currentPackage = data.get(i).getArrayList();
+                
+                // counting each class
+                for (int j = 0; j < currentPackage.size(); j++)
+                    ((PathNode)currentPackage.get(j)).count();
+                
+                data.get(i).count();
+        }
     }
 }

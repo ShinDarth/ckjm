@@ -157,10 +157,45 @@ public class MetricsFilter {
         if (cm.ShinAndGigaWorks())
         {
             // Organizing all packages/classes/methods called by each visited class
-           CalledClass allCalledClasses[][] = cm.getAllCalledClasses();
+           CalledClassPath allCalledClasses[][] = cm.getAllCalledClasses();
            DataHandler dataHandler = new DataHandler();
            
-           // TODO: organizzare tutte le classi chiamate (allCalledClasses) dentro il dataHandler
+           for (int i = 0; i < allCalledClasses.length; i++)
+           {
+               for (int j = 0; j < allCalledClasses[i].length; j++)
+               {
+                   String fullName = allCalledClasses[i][j].getClassName(), packageName, className;
+                   
+                   int x = fullName.length() - 1;
+                   while(fullName.charAt(x) != '.') x--;
+                   
+                   packageName = fullName.substring(0, x);
+                   className = fullName.substring(x+1, fullName.length());
+                   
+                   PathNode currentPackage = dataHandler.getPackage(packageName);
+                   PathNode currentClass;
+                   
+                   if (currentPackage != null) // package is already in dataHandler
+                   {
+                       currentClass = (PathNode)currentPackage.getNode(className);
+                       
+                       if (currentClass != null) // class is already in dataHandler
+                       {
+                           
+                       }
+                       else // class is not in dataHandler yet
+                       {
+                           
+                       }
+                   }
+                   else // package is not in dataHandler yet
+                   {
+                       
+                   }
+                           
+                   // TO COMPLETE
+               }
+           }
         }
         
 	CkjmOutputHandler handler = new PrintPlainResults(System.out);

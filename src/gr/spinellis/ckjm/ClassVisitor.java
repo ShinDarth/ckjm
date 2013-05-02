@@ -60,7 +60,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
     
     // Shin && Giga works
     private String fetchMethods = "";
-    private HashSet<String> uniqueCalledClasses = new HashSet<String>();
+    private HashSet<String> uniqueCalledClassPathes = new HashSet<String>();
     
     public ClassVisitor(JavaClass jc, ClassMetricsContainer classMap) {
 	visitedClass = jc;
@@ -154,7 +154,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
         responseSet.add(signature);
         
         // Shin && Giga works
-        uniqueCalledClasses.add(className);
+        uniqueCalledClassPathes.add(className);
         fetchMethods += signature+"\n";
     }
 
@@ -206,18 +206,18 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
         // Shin && Giga works {{{
         if (cmap.ShinAndGigaWorks())
         {
-            CalledClass ClassesWhichICall[] = new CalledClass[uniqueCalledClasses.size()];
+            CalledClassPath ClassesWhichICall[] = new CalledClassPath[uniqueCalledClassPathes.size()];
 
             // assign class names
-            Iterator<String> itr = uniqueCalledClasses.iterator();
+            Iterator<String> itr = uniqueCalledClassPathes.iterator();
             for (int i = 0; i < ClassesWhichICall.length; i ++)
-                ClassesWhichICall[i] = new CalledClass(itr.next());
+                ClassesWhichICall[i] = new CalledClassPath(itr.next());
 
             // assign methods to each called class
             assignMethods(fetchMethods, ClassesWhichICall);
             
             // store in its own ClassMetrics
-            cm.setCalledClasses(ClassesWhichICall);
+            cm.setCalledClassPathes(ClassesWhichICall);
 
             // DEBUG
             System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
@@ -263,7 +263,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
     // Shin && Giga works
     
     // assign each method to its owner called class
-    public void assignMethods(String str, CalledClass[] calledClasses)
+    public void assignMethods(String str, CalledClassPath[] calledClasses)
     {
         int start = 0, methodNameStart, endLine = 0;
         

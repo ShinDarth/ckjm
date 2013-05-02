@@ -32,4 +32,16 @@ public class PathNode extends MethodNode {
         }
         return null;
     }
+    
+    public boolean hasNode(String n)    { return getNode(n) != null; }
+    
+    public void count()
+    {
+        int c = 0;
+        
+        for(int i = 0; i < nodeList.size(); i++)
+            c += nodeList.get(i).getCount();
+        
+        setCount(c);
+    }
 }

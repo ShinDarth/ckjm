@@ -49,9 +49,9 @@ class ClassMetricsContainer {
     
     public DataHandler dataHandler()                        { return dataHandler; }
     
-    public CalledClass[][] getAllCalledClasses()
+    public CalledClassPath[][] getAllCalledClasses()
     {
-        CalledClass allCalledClasses[][] = new CalledClass[m.size()][];
+        CalledClassPath allCalledClasses[][] = new CalledClassPath[m.size()][];
         Iterator itr = m.values().iterator();
         int i = 0;
         

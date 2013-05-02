@@ -52,11 +52,11 @@ public class ClassMetrics {
     
     // Shin && Giga works {{{
     
-    private CalledClass[] classesWhichICall;
+    private CalledClassPath[] classesWhichICall;
     
-    public void setCalledClasses(CalledClass[] cwIc)    { classesWhichICall = cwIc; }
+    public void setCalledClassPathes(CalledClassPath[] cwIc)    { classesWhichICall = cwIc; }
     
-    public CalledClass[] getClassesWhichICall()         { return classesWhichICall; }
+    public CalledClassPath[] getClassesWhichICall()         { return classesWhichICall; }
     
     // Shin && Giga works }}}
 
@@ -68,6 +68,7 @@ public class ClassMetrics {
 	npm = 0;
 	visited = false;
 	afferentCoupledClasses = new HashSet<String>();
+        classesWhichICall = new CalledClassPath[0];
     }
 
     /** Increment the weighted methods count */

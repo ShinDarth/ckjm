@@ -1,5 +1,8 @@
 /*
  * Shin && Giga works
+ * 
+ * CalledClassPath contains datas in the format package+class
+ * 
  */
 
 package gr.spinellis.ckjm;
@@ -8,12 +11,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class CalledClass
+public class CalledClassPath
 {
     private String className;
     private HashMap<String, Integer> myMethods;
     
-    public CalledClass(String name)
+    public CalledClassPath(String name)
     {
         className = name;
         myMethods = new HashMap<String, Integer>();
