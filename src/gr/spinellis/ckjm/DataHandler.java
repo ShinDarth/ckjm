@@ -1,5 +1,11 @@
 /*
  * Shin && Giga works
+ * 
+ * DataHandler handles all called packages (stored in PathNode objects) which
+ * contains all called classes (also stored in other PathNode objects).
+ * Each PathNode which represents a called class will contain an array of
+ * called methods (each one stored in MethodNode objects).
+ * 
  */
 
 package gr.spinellis.ckjm;
@@ -8,7 +14,7 @@ import java.util.ArrayList;
 
 public class DataHandler {
 
-    ArrayList<Node> data;
+    ArrayList<PathNode> data;
 
     public DataHandler(String signature) {
         data = new ArrayList();
@@ -16,11 +22,11 @@ public class DataHandler {
     }
 
     public void addPackage(String p) {
-        Node pack = new Node(p);
+        PathNode pack = new PathNode(p);
         data.add(pack);
     }
 
-    public Node getPackage(String p) {
+    public PathNode getPackage(String p) {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getName().equals(p)) 
                 return data.get(i);    
@@ -28,14 +34,14 @@ public class DataHandler {
         return null;
     }
     
-    public Node getClassOfPackage(String p, String c) {
-        Node pack = getPackage(p);
-        return (Node)pack.getNode(c);
+    public PathNode getClassOfPackage(String p, String c) {
+        PathNode pack = getPackage(p);
+        return (PathNode)pack.getNode(c);
     }
 
     public boolean addClasstoPackage(String p, String c) {
-        Node pack = getPackage(p);
-        Node cl = new Node(c);
+        PathNode pack = getPackage(p);
+        PathNode cl = new PathNode(c);
         
         if(pack != null) {
             pack.addNode(cl);
@@ -45,8 +51,8 @@ public class DataHandler {
     }
 
     public boolean addMethodtoClass(String p, String c, String m) {
-       Node cl = getClassOfPackage(p,c);
-       SimpleNode method = new SimpleNode(m);
+       PathNode cl = getClassOfPackage(p,c);
+       MethodNode method = new MethodNode(m);
        
        if(cl !=  null) {
            cl.addNode(method);
@@ -55,8 +61,8 @@ public class DataHandler {
        return false;
     }
     
-    public SimpleNode getMethodOfClass(String p, String c, String m) {
-        Node cl = getClassOfPackage(p,c);
+    public MethodNode getMethodOfClass(String p, String c, String m) {
+        PathNode cl = getClassOfPackage(p,c);
         return cl.getNode(m);
     }
 }

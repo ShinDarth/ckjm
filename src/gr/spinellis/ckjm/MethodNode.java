@@ -1,15 +1,18 @@
 /*
  * Shin && Giga works
+ * 
+ * MethodNode contains methods data
+ * 
  */
 
 package gr.spinellis.ckjm;
 
-public class SimpleNode {
+public class MethodNode {
     
     public String name;
     public int count;
     
-    public SimpleNode(String name) {
+    public MethodNode(String name) {
         this.name = name;
         count = 0;
     }
