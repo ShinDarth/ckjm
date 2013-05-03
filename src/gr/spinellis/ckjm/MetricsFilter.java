@@ -175,25 +175,33 @@ public class MetricsFilter {
                    PathNode currentPackage = dataHandler.getPackage(packageName);
                    PathNode currentClass;
                    
+                   // check if package and class are in dataHandler, add them if not
                    if (currentPackage != null) // package is already in dataHandler
                    {
                        currentClass = (PathNode)currentPackage.getNode(className);
                        
-                       if (currentClass != null) // class is already in dataHandler
+                       if (currentClass == null) // class is already in dataHandler
                        {
+                           dataHandler.addClassToPackage(packageName, className);
                            
-                       }
-                       else // class is not in dataHandler yet
-                       {
-                           
+                           currentClass = dataHandler.getClassOfPackage(packageName, className);
                        }
                    }
                    else // package is not in dataHandler yet
                    {
+                       dataHandler.addPackage(packageName);
+                       dataHandler.addClassToPackage(packageName, className);
                        
+                       currentPackage = dataHandler.getPackage(packageName);
+                       currentClass = dataHandler.getClassOfPackage(packageName, className);
                    }
-                           
-                   // TO COMPLETE
+                   
+                   // now both package and class should be in dataHandler
+                   if (currentPackage == null || currentClass == null) // test check
+                   {
+                       System.out.println("Error! dataHandler is not fine!");
+                       System.exit(-1);
+                   }
                }
            }
         }
