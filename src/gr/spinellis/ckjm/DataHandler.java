@@ -34,7 +34,6 @@ public class DataHandler {
         return null;
     }
     
-    public boolean hasPackage(String p) { return getPackage(p) != null; }
     
     public PathNode getClassOfPackage(String p, String c) {
         PathNode pack = getPackage(p);
