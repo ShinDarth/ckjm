@@ -92,24 +92,24 @@ public class DataHandler {
         while (pkgItr.hasNext())
         {
             PathNode currentPackage = (PathNode)pkgItr.next();
-            out += "Package: "+currentPackage.getName()+" ["+currentPackage.getCount()+"] \n";
+            out += "Package: "+currentPackage.getName()+" ["+currentPackage.getCount()+"] \n{\n";
             
             Iterator classItr = currentPackage.getArrayList().iterator();
             
             while (classItr.hasNext())
             {
                 PathNode currentClass = (PathNode)classItr.next();
-                out += "    Class: "+currentClass.getName()+" ["+currentClass.getCount()+"] \n";
+                out += "\tClass: "+currentClass.getName()+" ["+currentClass.getCount()+"] \n\t{\n";
                 
                 Iterator mtdItr = currentClass.getArrayList().iterator();
                 while (mtdItr.hasNext())
                 {
                     MethodNode currentMethod = (MethodNode)mtdItr.next();
-                    out += "        Method: "+currentMethod.getName()+"    ["+currentMethod.getCount()+"]\n";
+                    out += "\t\tMethod: "+currentMethod.getName()+"  ["+currentMethod.getCount()+"]\n";
                 }
-                out += "\n";
+                out += "\t}\n\n";
             }
-            out += "\n\n";
+            out += "}\n\n";
         }
         
         return out;
