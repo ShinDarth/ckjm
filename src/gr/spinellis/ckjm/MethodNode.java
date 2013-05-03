@@ -9,8 +9,8 @@ package gr.spinellis.ckjm;
 
 public class MethodNode {
     
-    public String name;
-    public int count;
+    protected String name;
+    protected int count;
     
     public MethodNode(String name) {
         this.name = name;
@@ -21,4 +21,5 @@ public class MethodNode {
     public void setName(String name)    { this.name = name; }
     public int getCount()               { return count; }
     public void setCount(int count)     { this.count = count; }
+    public void incrCount(int count)    { this.count += count; }
 }

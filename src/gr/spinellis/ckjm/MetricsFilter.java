@@ -17,10 +17,6 @@
 package gr.spinellis.ckjm;
 
 import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.Repository;
-import org.apache.bcel.Constants;
-import org.apache.bcel.util.*;
 import java.io.*;
 import java.util.*;
 
@@ -202,8 +198,42 @@ public class MetricsFilter {
                        System.out.println("Error! dataHandler is not fine!");
                        System.exit(-1);
                    }
+                   
+                   // add methods to class
+                   HashMap<String, Integer> currentMethods =  allCalledClasses[i][j].getMethods();
+                   Iterator methodsItr = currentMethods.keySet().iterator();
+                   
+                   while (methodsItr.hasNext())
+                   {
+                       String methodName = (String)methodsItr.next();
+                       int methodCount = currentMethods.get(methodName);
+                       
+                       MethodNode currentMethod= dataHandler.getMethodOfClass(packageName, className, methodName);
+                       
+                       if (currentMethod == null) // method is not in dataHandler yet
+                       {
+                           // add a new method
+                           dataHandler.addMethodToClass(packageName, className, methodName);
+                           
+                           // now currentMethod should no longer be null
+                           currentMethod = dataHandler.getMethodOfClass(packageName, className, methodName);
+                       }
+                       
+                       // update countck
+                       currentMethod.incrCount(methodCount);
+                   }
                }
            }
+           
+           // update count of all nodes
+           dataHandler.countAll();
+           
+           // print everything
+           System.out.println("\n\n*********All packages called by all analyzed .class files*********");
+           
+           System.out.println(dataHandler.toString());
+           
+           System.out.println("\n******************************************************************\n");
         }
         
 	CkjmOutputHandler handler = new PrintPlainResults(System.out);

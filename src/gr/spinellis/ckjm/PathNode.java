@@ -8,11 +8,10 @@
 package gr.spinellis.ckjm;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class PathNode extends MethodNode {
     
-    ArrayList<MethodNode> nodeList;
+    protected ArrayList<MethodNode> nodeList;
     
     public PathNode(String name) {
         super(name);

@@ -11,6 +11,7 @@
 package gr.spinellis.ckjm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DataHandler {
 
@@ -80,5 +81,38 @@ public class DataHandler {
                 
                 data.get(i).count();
         }
+    }
+    
+    @Override
+    public String toString()
+    {
+        String out = "";
+        
+        Iterator pkgItr = data.iterator();
+        
+        while (pkgItr.hasNext())
+        {
+            PathNode currentPackage = (PathNode)pkgItr.next();
+            out += "Package: "+currentPackage.getName()+"\n";
+            
+            Iterator classItr = currentPackage.getArrayList().iterator();
+            
+            while (classItr.hasNext())
+            {
+                PathNode currentClass = (PathNode)classItr.next();
+                out += "    Class: "+currentClass.getName()+"\n";
+                
+                Iterator mtdItr = currentClass.getArrayList().iterator();
+                while (mtdItr.hasNext())
+                {
+                    MethodNode currentMethod = (MethodNode)mtdItr.next();
+                    out += "        Method: "+currentMethod.getName()+"    ["+currentMethod.getCount()+"]\n";
+                }
+                out += "\n";
+            }
+            out += "\n\n";
+        }
+        
+        return out;
     }
 }

@@ -8,7 +8,6 @@
 package gr.spinellis.ckjm;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class CalledClassPath
@@ -36,7 +35,8 @@ public class CalledClassPath
         }
     }
     
-    public String getClassName() { return className; }
+    public HashMap<String, Integer> getMethods()    { return myMethods; }
+    public String getClassName()                    { return className; }
     
     public int getCalledMethodsCount()
     {
