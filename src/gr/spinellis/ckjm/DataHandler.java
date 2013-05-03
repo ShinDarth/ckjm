@@ -93,14 +93,14 @@ public class DataHandler {
         while (pkgItr.hasNext())
         {
             PathNode currentPackage = (PathNode)pkgItr.next();
-            out += "Package: "+currentPackage.getName()+"\n";
+            out += "Package: "+currentPackage.getName()+" ["+currentPackage.getCount()+"] \n";
             
             Iterator classItr = currentPackage.getArrayList().iterator();
             
             while (classItr.hasNext())
             {
                 PathNode currentClass = (PathNode)classItr.next();
-                out += "    Class: "+currentClass.getName()+"\n";
+                out += "    Class: "+currentClass.getName()+" ["+currentClass.getCount()+"] \n";
                 
                 Iterator mtdItr = currentClass.getArrayList().iterator();
                 while (mtdItr.hasNext())
