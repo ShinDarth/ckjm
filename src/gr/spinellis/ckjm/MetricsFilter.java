@@ -155,6 +155,7 @@ public class MetricsFilter {
             // Organizing all packages/classes/methods called by each visited class
            CalledClassPath allCalledClasses[][] = cm.getAllCalledClasses();
            DataHandler dataHandler = new DataHandler();
+           CategoryHandler categoryHandler = CategoryHandler.getCategoryHandler();
            
            for (int i = 0; i < allCalledClasses.length; i++)
            {
@@ -234,6 +235,8 @@ public class MetricsFilter {
            System.out.println(dataHandler.toString());
            
            System.out.println("\n******************************************************************\n");
+           
+           categoryHandler.process();
         }
         
 	CkjmOutputHandler handler = new PrintPlainResults(System.out);

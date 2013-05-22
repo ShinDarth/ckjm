@@ -61,6 +61,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
     // Shin && Giga works
     private String fetchMethods = "";
     private HashSet<String> uniqueCalledClassPathes = new HashSet<String>();
+    private CategoryHandler categoryHandler = CategoryHandler.getCategoryHandler();
     
     public ClassVisitor(JavaClass jc, ClassMetricsContainer classMap) {
 	visitedClass = jc;
@@ -218,7 +219,10 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
             
             // store in its own ClassMetrics
             cm.setCalledClassPathes(ClassesWhichICall);
-
+            
+            // add to CategoryHandler
+            categoryHandler.addInputClass(myClassName, ClassesWhichICall);
+            
             // DEBUG
             System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
             for (int i = 0; i < ClassesWhichICall.length; i ++)
