@@ -224,7 +224,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
             categoryHandler.addInputClass(myClassName, ClassesWhichICall);
             
             // DEBUG
-            System.out.println("\nClassi con cui "+myClassName+" interagisce:\n");
+            System.out.println("\n>>> Classes with which "+myClassName+" interacts:\n");
             for (int i = 0; i < ClassesWhichICall.length; i ++)
             {
                 System.out.println(ClassesWhichICall[i].toString());
@@ -239,7 +239,7 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
                     methodsCalledPerPackage += ClassesWhichICall[i].getCalledMethodsCount();
 
             // DEBUG
-            System.out.println("La classe "+myClassName+" chiama "+methodsCalledPerPackage+" metodi del package "+packageName+"\n\n\n");
+            System.out.println("* CUSTOM REQUEST: Class "+myClassName+" calls "+methodsCalledPerPackage+" methods of package \""+packageName+"\"\n\n\n");
             //*/
             
         } // Shin && Giga works }}}

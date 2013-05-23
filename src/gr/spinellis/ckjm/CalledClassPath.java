@@ -52,7 +52,7 @@ public class CalledClassPath
     @Override
     public String toString()
     {
-        String str = "Class name: "+className+" called methods amount: "+getCalledMethodsCount()+"\n";
+        String str = "Class name: "+className+"\t--> called methods amount: "+getCalledMethodsCount()+"\n";
         
         str+="Methods: "+myMethods.toString()+"\n";
         

@@ -181,7 +181,7 @@ public class CategoryHandler
             System.out.println();
         }
         
-        System.out.println("\n *** CategoryHandler process end! ***\n");
+        System.out.println("\n *** CategoryHandler process ends! ***\n");
     }
     
     public int getMaxNameLength()

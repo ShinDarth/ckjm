@@ -108,7 +108,7 @@ public class MetricsFilter {
             onlyPublic = false;
             
             String packageName = "";
-            System.out.print("Insert package name: ");
+            System.out.print("Insert package name (* CUSTOM REQUEST): ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             try
             {
@@ -230,7 +230,7 @@ public class MetricsFilter {
            dataHandler.countAll();
            
            // print everything
-           System.out.println("\n\n*********All packages called by all analyzed .class files*********");
+           System.out.println("\n\n********* All packages called by all analyzed .class files *********");
            
            System.out.println(dataHandler.toString());
            
