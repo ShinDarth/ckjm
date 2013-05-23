@@ -13,6 +13,7 @@ public class CategoryHandler
     
     private Category[] categories;
     private int[][] matrix;
+    private int[] tot;
     
     // same indexes
     private ArrayList<String> inputClassName;
@@ -143,6 +144,7 @@ public class CategoryHandler
         System.out.println("\n\n *** CategoryHandler process starts! ***\n");
         
         matrix = new int[inputClassName.size()][categories.length];
+        tot = new int[categories.length];
         
         int maxNameLength = getMaxNameLength();
         
@@ -163,6 +165,7 @@ public class CategoryHandler
                     if (categories[catIdx].check(classesWhichICall[calledClassIdx].getClassName()))
                     {
                         matrix[inputClassIdx][catIdx]+= classesWhichICall[calledClassIdx].getCalledMethodsCount();
+                        tot[catIdx] += classesWhichICall[calledClassIdx].getCalledMethodsCount();
                         break; // assuming each class belongs to one (and only one) category
                     }
                 }
@@ -181,7 +184,17 @@ public class CategoryHandler
             System.out.println();
         }
         
-        System.out.println("\n *** CategoryHandler process ends! ***\n");
+        System.out.println();
+        
+        for (int i = 0; i < maxNameLength/6; i++)
+            System.out.print("\t");
+            
+        System.out.print("\tTOTAL:    ");
+        
+        for (int i = 0; i < categories.length; i++)
+            System.out.print(tot[i]+"\t");
+        
+        System.out.println("\n\n *** CategoryHandler process ends! ***\n");
     }
     
     public int getMaxNameLength()
