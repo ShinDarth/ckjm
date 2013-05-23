@@ -15,11 +15,15 @@ import java.util.Iterator;
 
 public class DataHandler {
 
-    ArrayList<PathNode> data;
+    private static DataHandler dataHandler = new DataHandler();
+    
+    private ArrayList<PathNode> data;
 
-    public DataHandler() {
+    private DataHandler() {
         data = new ArrayList();
     }
+    
+    public static DataHandler getDataHandler()  { return dataHandler; }
 
     public void addPackage(String p) {
         PathNode pack = new PathNode(p);

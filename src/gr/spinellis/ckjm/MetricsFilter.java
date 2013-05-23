@@ -154,7 +154,7 @@ public class MetricsFilter {
         {
             // Organizing all packages/classes/methods called by each visited class
            CalledClassPath allCalledClasses[][] = cm.getAllCalledClasses();
-           DataHandler dataHandler = new DataHandler();
+           DataHandler dataHandler = DataHandler.getDataHandler();
            CategoryHandler categoryHandler = CategoryHandler.getCategoryHandler();
            
            for (int i = 0; i < allCalledClasses.length; i++)
