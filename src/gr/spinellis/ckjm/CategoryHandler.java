@@ -162,7 +162,7 @@ public class CategoryHandler
                 {
                     if (categories[catIdx].check(classesWhichICall[calledClassIdx].getClassName()))
                     {
-                        matrix[inputClassIdx][catIdx]++;
+                        matrix[inputClassIdx][catIdx]+= classesWhichICall[calledClassIdx].getCalledMethodsCount();
                         break; // assuming each class belongs to one (and only one) category
                     }
                 }
