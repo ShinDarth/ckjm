@@ -219,8 +219,11 @@ public class CategoryHandler
             int space = maxNameLength - inputClassName.get(inputClassIdx).length();
             for (int i = 0; i < space; i++)
                 System.out.print(" ");
-                    
-            System.out.println("\t"+fragm[inputClassIdx]);
+            
+            if (!Double.isNaN(fragm[inputClassIdx]))
+                System.out.println("\t"+fragm[inputClassIdx]+"\n");
+            else
+                System.out.println("\t[no categorized methods]\n");
         }
         
         System.out.println("\n\n *** CategoryHandler process ends! ***\n");
