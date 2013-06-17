@@ -203,7 +203,15 @@ public class CategoryHandler
         
         System.out.println("\nK = "+K+";\n");
         
-        serialFragm();
+        long start;
+        int testCount = 10;
+        
+        start = System.nanoTime();    
+        
+        for (int i = 0; i < testCount; i++)
+            serialFragm();
+        
+        long serialTime = (System.nanoTime() - start)/testCount;
         
         // print results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
@@ -220,6 +228,8 @@ public class CategoryHandler
             else
                 System.out.println("\t[no categorized methods]\n");
         }
+        
+        System.out.println("Serial time: "+serialTime/1000+" ms");
         
         System.out.println("\n\n *** CategoryHandler process ends! ***\n");
     }
