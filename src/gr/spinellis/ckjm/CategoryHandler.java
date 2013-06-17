@@ -15,6 +15,7 @@ public class CategoryHandler
     private int[][] matrix;
     private int[] tot;
     private double[] fragm;
+    double coeff;
     
     // same indexes
     private ArrayList<String> inputClassName;
@@ -196,23 +197,17 @@ public class CategoryHandler
             System.out.print(tot[i]+"\t");
         
         fragm = new double[inputClassName.size()];
-        double K = categories.length, itc, itc_sqr;
+        double K = categories.length;
         
-        double coeff = 1.0 / ((int)Math.sqrt(K) - 1.0);
+        coeff = 1.0 / ((int)Math.sqrt(K) - 1.0);
         
         System.out.println("\nK = "+K+";\n");
         
+        serialFragm();
+        
+        // print results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
-            itc = itc_sqr = 0;
-            for (int k = 0; k < categories.length; k++)
-            {
-                itc += matrix[inputClassIdx][k];
-                itc_sqr += Math.pow(matrix[inputClassIdx][k], 2);
-            }
-            
-            fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
-            
             System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
             
             // output format
@@ -227,6 +222,23 @@ public class CategoryHandler
         }
         
         System.out.println("\n\n *** CategoryHandler process ends! ***\n");
+    }
+    
+    public void serialFragm()
+    {
+        double itc, itc_sqr;
+        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
+        {
+            itc = itc_sqr = 0;
+
+            for (int k = 0; k < categories.length; k++)
+            {
+                itc += matrix[inputClassIdx][k];
+                itc_sqr += Math.pow(matrix[inputClassIdx][k], 2);
+            }
+            
+            fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
+        }
     }
     
     public int getMaxNameLength()
