@@ -108,7 +108,7 @@ public class MetricsFilter {
             onlyPublic = false;
             
             String packageName = "";
-            System.out.print("Insert package name (* CUSTOM REQUEST): ");
+            System.out.print("Insert a package name or leave blank (* CUSTOM REQUEST): ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             try
             {
