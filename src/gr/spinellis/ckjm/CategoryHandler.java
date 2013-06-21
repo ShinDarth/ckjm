@@ -5,6 +5,7 @@
 
 package gr.spinellis.ckjm;
 
+import com.amd.aparapi.Kernel;
 import java.util.ArrayList;
 
 public class CategoryHandler
@@ -249,6 +250,35 @@ public class CategoryHandler
             
             fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
         }
+    }
+    
+    public void parallelFragm()
+    {
+        
+        
+        Kernel kernel = new Kernel()
+        {
+            @Override public void run()
+            {
+                int inputClassIdx = getGlobalId();
+                
+                if (inputClassIdx >= fragm.length)
+                    return;
+                
+                double itc = 0, itc_sqr = 0;
+
+                for (int k = 0; k < categories.length; k++)
+                {
+                    itc += matrix[inputClassIdx][k];
+                    itc_sqr += Math.pow(matrix[inputClassIdx][k], 2);
+                }
+
+                fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
+            }
+        };
+        
+        kernel.execute(fragm.length);
+
     }
     
     public int getMaxNameLength()
