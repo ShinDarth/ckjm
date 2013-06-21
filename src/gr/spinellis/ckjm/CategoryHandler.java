@@ -214,6 +214,15 @@ public class CategoryHandler
         
         long serialTime = (System.nanoTime() - start)/testCount;
         
+        testCount = 10;
+        
+        start = System.nanoTime();    
+        
+        for (int i = 0; i < testCount; i++)
+            parallelFragm();
+        
+        long parallelTime = (System.nanoTime() - start)/testCount;
+        
         // print results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
@@ -231,6 +240,7 @@ public class CategoryHandler
         }
         
         System.out.println("Serial time: "+serialTime/1000+" ms");
+        System.out.println("Parallel time: "+parallelTime/1000+" ms");
         
         System.out.println("\n\n *** CategoryHandler process ends! ***\n");
     }
@@ -254,7 +264,16 @@ public class CategoryHandler
     
     public void parallelFragm()
     {
+        final int n = fragm.length;
+        final int catLen = categories.length;
+        final int[] matrix2 = new int[matrix.length*matrix[0].length];
+        final double coeff2 = coeff;
         
+        for (int i = 0; i < matrix.length; i++)
+            for (int j = 0; j < matrix[i].length; j++)
+                matrix2[i*matrix[0].length+j] = matrix[i][j];
+        
+        final int colLen = matrix[0].length;
         
         Kernel kernel = new Kernel()
         {
@@ -262,18 +281,19 @@ public class CategoryHandler
             {
                 int inputClassIdx = getGlobalId();
                 
-                if (inputClassIdx >= fragm.length)
+                if (inputClassIdx >= n) // ...
                     return;
                 
                 double itc = 0, itc_sqr = 0;
-
-                for (int k = 0; k < categories.length; k++)
+                
+                for (int k = 0; k < catLen; k++)
                 {
-                    itc += matrix[inputClassIdx][k];
-                    itc_sqr += Math.pow(matrix[inputClassIdx][k], 2);
+                    itc += matrix2[inputClassIdx*colLen+k];
+                    itc_sqr += Math.pow(matrix2[inputClassIdx*colLen+k], 2);
                 }
-
-                fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
+                
+                fragm[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
+                // */
             }
         };
         
