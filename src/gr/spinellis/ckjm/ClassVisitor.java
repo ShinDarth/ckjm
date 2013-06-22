@@ -223,23 +223,25 @@ public class ClassVisitor extends org.apache.bcel.classfile.EmptyVisitor {
             // add to CategoryHandler
             categoryHandler.addInputClass(myClassName, ClassesWhichICall);
             
-            System.out.println("\n>>> Classes with which "+myClassName+" interacts:\n");
-            for (int i = 0; i < ClassesWhichICall.length; i ++)
-                System.out.println(ClassesWhichICall[i].toString());
-            
-            String packageName = cmap.getPackageName();
-            
-            if (packageName.length() > 0)
+            if (cmap.detailsEnabled())
             {
+                System.out.println("\n>>> Classes with which "+myClassName+" interacts:\n");
+                for (int i = 0; i < ClassesWhichICall.length; i ++)
+                    System.out.println(ClassesWhichICall[i].toString());
+            }
+            
+            if (cmap.fanIn())
+            {
+                String packageName = cmap.getPackageName();
+            
                 int methodsCalledPerPackage = 0;
 
                 for (int i = 0; i < ClassesWhichICall.length; i ++)
                     if (ClassesWhichICall[i].getClassName().startsWith(packageName))
                         methodsCalledPerPackage += ClassesWhichICall[i].getCalledMethodsCount();
 
-                System.out.println("* CUSTOM REQUEST: Class "+myClassName+" calls "+methodsCalledPerPackage+" methods of package \""+packageName+"\"\n\n\n");
+                System.out.println("* FAN-IN: Class "+myClassName+" calls "+methodsCalledPerPackage+" methods of package \""+packageName+"\"\n\n\n");
             }
-            
         } // Shin && Giga works }}}
 
 	/*

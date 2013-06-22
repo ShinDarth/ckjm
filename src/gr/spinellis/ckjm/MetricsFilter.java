@@ -100,27 +100,47 @@ public class MetricsFilter {
         ClassMetricsContainer cm = new ClassMetricsContainer();
         
         // Shin && Giga works
-        if (argv.length > 0 && argv[argp].equals("-c"))
+        if (argv.length > 0 && argv[argp].startsWith("-c"))
         {
             cm.enableShinAndGiga();
+            
+            // check extra params
+            int i = 2;
+            while (i < argv[argp].length())
+            {
+                if (argv[argp].charAt(i) == 'D')
+                    cm.enableDetails();
+                
+                if (argv[argp].charAt(i) == 'G')
+                    cm.enableGlobalDetails();
+                
+                if (argv[argp].charAt(i) == 'F')
+                    cm.enableFanIn();
+                
+                i++;
+            }
+            
             argp++;
             includeJdk = true;
             onlyPublic = false;
             
-            String packageName = "";
-            System.out.print("Insert a package name or leave blank (* CUSTOM REQUEST): ");
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            try
+            if (cm.fanIn())
             {
-                packageName = in.readLine();
-                in.close();
+                String packageName = "";
+                System.out.print("Insert a package name to calc fan-in: ");
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                try
+                {
+                    packageName = in.readLine();
+                    in.close();
+                }
+                catch(Exception e)
+                {
+                    System.err.println("Error reading line: " + e);
+                        System.exit(1);
+                }
+                cm.setPackageName(packageName);
             }
-            catch(Exception e)
-            {
-                System.err.println("Error reading line: " + e);
-                    System.exit(1);
-            }
-            cm.setPackageName(packageName);
         }
         else // standard ckjm
         {
@@ -150,12 +170,11 @@ public class MetricsFilter {
 	    processClass(cm, argv[i]);
         
         // Shin && Giga works
-        if (cm.ShinAndGigaWorks())
+        if (cm.globalDetailsEnabled())
         {
             // Organizing all packages/classes/methods called by each visited class
            CalledClassPath allCalledClasses[][] = cm.getAllCalledClasses();
            DataHandler dataHandler = DataHandler.getDataHandler();
-           CategoryHandler categoryHandler = CategoryHandler.getCategoryHandler();
            
            for (int i = 0; i < allCalledClasses.length; i++)
            {
@@ -235,9 +254,10 @@ public class MetricsFilter {
            System.out.println(dataHandler.toString());
            
            System.out.println("\n******************************************************************\n");
-           
-           categoryHandler.process();
         }
+        
+        if (cm.ShinAndGigaWorks())
+            CategoryHandler.getCategoryHandler().process();
         
 	CkjmOutputHandler handler = new PrintPlainResults(System.out);
 	cm.printMetrics(handler);

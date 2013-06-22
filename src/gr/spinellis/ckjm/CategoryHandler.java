@@ -16,7 +16,7 @@ public class CategoryHandler
     private int[][] matrix;
     private int[] tot;
     private double[] fragm;
-    double coeff;
+    private double coeff;
     
     // same indexes
     private ArrayList<String> inputClassName;

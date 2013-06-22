@@ -38,12 +38,19 @@ class ClassMetricsContainer {
     
     // Shin && Giga works {{{
     private String packageName;
-    private boolean ShinAndGigaEnabled = false;
+    private boolean ShinAndGigaEnabled = false, showDetails = false, fanIn = false, globalDetails;
     
     public String getPackageName()                          { return packageName; }
     public void setPackageName(String str)                  { packageName = str; }
     
+    public boolean detailsEnabled()                         { return showDetails; }
+    public boolean globalDetailsEnabled()                   { return globalDetails; }
+    public boolean fanIn()                                  { return fanIn; }
     public boolean ShinAndGigaWorks()                       { return ShinAndGigaEnabled; }
+    
+    public void enableDetails()                             { showDetails = true; }
+    public void enableGlobalDetails()                       { globalDetails = true; }
+    public void enableFanIn()                               { fanIn = true; }
     public void enableShinAndGiga()                         { ShinAndGigaEnabled = true; }
     
     public CalledClassPath[][] getAllCalledClasses()
