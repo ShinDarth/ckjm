@@ -5,7 +5,7 @@ How to use it:
 java -jar ckjm -c InputClassToBeAnalyzed.class
 
 
-To show other information, concatenate this letters to "-c" param:
+To show other information, concatenate these letters to "-c" param:
 
 D = details
 
