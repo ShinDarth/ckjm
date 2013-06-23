@@ -5,6 +5,7 @@
 
 package gr.spinellis.ckjm;
 
+import com.amd.aparapi.Device;
 import com.amd.aparapi.Kernel;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class CategoryHandler
     private int[][] matrix;
     private int[] tot;
     private double[] fragm;
-    private double coeff;
+    double coeff;
     
     // same indexes
     private ArrayList<String> inputClassName;
@@ -158,7 +159,7 @@ public class CategoryHandler
         
         for (int inputClassIdx = 0; inputClassIdx < inputClassName.size(); inputClassIdx++)
         {
-            System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
+            //System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
             CalledClassPath[] classesWhichICall = calledClassesOfInputClass.get(inputClassIdx);
             
             for (int calledClassIdx = 0; calledClassIdx < classesWhichICall.length; calledClassIdx++)
@@ -176,15 +177,15 @@ public class CategoryHandler
             
             // print results
             int spaces = maxNameLength - inputClassName.get(inputClassIdx).length();
-            for (int i = 0; i < spaces; i++)
-                System.out.print(" ");
-            
-            System.out.print("\t\t  ");
-            
-            for (int k = 0; k < matrix[inputClassIdx].length; k++)
-                System.out.print(matrix[inputClassIdx][k]+"\t");
-            
-            System.out.println();
+//            for (int i = 0; i < spaces; i++)
+//                System.out.print(" ");
+//            
+//            System.out.print("\t\t  ");
+//            
+//            for (int k = 0; k < matrix[inputClassIdx].length; k++)
+//                System.out.print(matrix[inputClassIdx][k]+"\t");
+//            
+//            System.out.println();
         }
         
         System.out.println();
@@ -204,40 +205,51 @@ public class CategoryHandler
         
         System.out.println("\nK = "+K+";\n");
         
+        //TEST CPU VS GPU
+        int testCount = 10000;
         long start;
-        int testCount = 10;
+        long parallelTime;
+        long serialTime;
         
+        //start CPU
         start = System.nanoTime();    
         
         for (int i = 0; i < testCount; i++)
             serialFragm();
         
-        long serialTime = (System.nanoTime() - start)/testCount;
+        serialTime = (System.nanoTime() - start)/testCount;
         
-        testCount = 10;
         
-        start = System.nanoTime();    
+        //Start GPU
+        Kernel MyKernel = parallelFragm();
         
-        for (int i = 0; i < testCount; i++)
-            parallelFragm();
+        start = System.nanoTime();
+        MyKernel.execute(fragm.length, testCount);
+        parallelTime = (System.nanoTime() - start)/testCount;
         
-        long parallelTime = (System.nanoTime() - start)/testCount;
+        MyKernel.dispose();
+        
+        if (!MyKernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
+            System.out.println("Kernel nid not execute on the GPU!");
+        
+
+
         
         // print results
-        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
-        {
-            System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
-            
-            // output format
-            int space = maxNameLength - inputClassName.get(inputClassIdx).length();
-            for (int i = 0; i < space; i++)
-                System.out.print(" ");
-            
-            if (!Double.isNaN(fragm[inputClassIdx]))
-                System.out.println("\t"+fragm[inputClassIdx]+"\n");
-            else
-                System.out.println("\t[no categorized methods]\n");
-        }
+//        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
+//        {
+//            System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
+//            
+//            // output format
+//            int space = maxNameLength - inputClassName.get(inputClassIdx).length();
+//            for (int i = 0; i < space; i++)
+//                System.out.print(" ");
+//            
+//            if (!Double.isNaN(fragm[inputClassIdx]))
+//                System.out.println("\t"+fragm[inputClassIdx]+"\n");
+//            else
+//                System.out.println("\t[no categorized methods]\n");
+//        }
         
         System.out.println("Serial time: "+serialTime/1000+" ms");
         System.out.println("Parallel time: "+parallelTime/1000+" ms");
@@ -262,42 +274,52 @@ public class CategoryHandler
         }
     }
     
-    public void parallelFragm()
+    /**
+     *
+     * @return
+     */
+    public Kernel parallelFragm()
     {
-        final int n = fragm.length;
-        final int catLen = categories.length;
-        final int[] matrix2 = new int[matrix.length*matrix[0].length];
-        final double coeff2 = coeff;
+        final int n =   fragm.length;
+        final int catLen =  categories.length;
+        final short[] matrix2 = new short[matrix.length*matrix[0].length];
+        final float coeff2 = (float) coeff;
+        final double fragm2[] = new double[matrix.length];
+        System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix2[i*matrix[0].length+j] = matrix[i][j];
+                matrix2[i*matrix[0].length+j] = (short) matrix[i][j];
         
         final int colLen = matrix[0].length;
         
+       
         Kernel kernel = new Kernel()
+              
         {
             @Override public void run()
             {
                 int inputClassIdx = getGlobalId();
                 
-                if (inputClassIdx >= n) // ...
+                if (inputClassIdx >= n)
                     return;
                 
                 double itc = 0, itc_sqr = 0;
                 
                 for (int k = 0; k < catLen; k++)
                 {
+                    
                     itc += matrix2[inputClassIdx*colLen+k];
                     itc_sqr += Math.pow(matrix2[inputClassIdx*colLen+k], 2);
                 }
-                
-                fragm[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
-                // */
+               
+                fragm2[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
+               
             }
         };
         
-        kernel.execute(fragm.length);
+        fragm = fragm2;
+        return kernel;
 
     }
     
