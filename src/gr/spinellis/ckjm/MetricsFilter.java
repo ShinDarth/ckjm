@@ -258,8 +258,10 @@ public class MetricsFilter {
         
         if (cm.ShinAndGigaWorks())
             CategoryHandler.getCategoryHandler().process();
-        
-	CkjmOutputHandler handler = new PrintPlainResults(System.out);
-	cm.printMetrics(handler);
+        else
+        {
+            CkjmOutputHandler handler = new PrintPlainResults(System.out);
+            cm.printMetrics(handler);
+        }
     }
 }
