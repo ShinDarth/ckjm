@@ -280,18 +280,18 @@ public class CategoryHandler
      */
     public Kernel parallelFragm()
     {
-        final int n =   fragm.length;
-        final int catLen =  categories.length;
-        final short[] matrix2 = new short[matrix.length*matrix[0].length];
-        final float coeff2 = (float) coeff;
-        final double fragm2[] = new double[matrix.length];
+        final int n_$costant$ =   fragm.length;
+        final int catLen_$costant$ =  categories.length;
+        final short[] matrix2_$local$ = new short[matrix.length*matrix[0].length];
+        final float coeff2_$costant$ = (float) coeff;
+        final double fragm2_$local$[] = new double[matrix.length];
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix2[i*matrix[0].length+j] = (short) matrix[i][j];
+                matrix2_$local$[i*matrix[0].length+j] = (short) matrix[i][j];
         
-        final int colLen = matrix[0].length;
+        final int colLen_$costant$ = matrix[0].length;
         
        
         Kernel kernel = new Kernel()
@@ -301,24 +301,25 @@ public class CategoryHandler
             {
                 int inputClassIdx = getGlobalId();
                 
-                if (inputClassIdx >= n)
+                if (inputClassIdx >= n_$costant$)
                     return;
                 
                 double itc = 0, itc_sqr = 0;
                 
-                for (int k = 0; k < catLen; k++)
+                for (int k = 0; k < catLen_$costant$; k++)
                 {
                     
-                    itc += matrix2[inputClassIdx*colLen+k];
-                    itc_sqr += Math.pow(matrix2[inputClassIdx*colLen+k], 2);
+                    itc += matrix2_$local$[inputClassIdx*colLen_$costant$+k];
+                    itc_sqr += Math.pow(matrix2_$local$[inputClassIdx*colLen_$costant$+k], 2);
                 }
                
-                fragm2[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
+                fragm2_$local$[inputClassIdx] = coeff2_$costant$ * (itc/Math.sqrt(itc_sqr) - 1.0);
                
             }
         };
+//       
         
-        fragm = fragm2;
+        fragm = fragm2_$local$;
         return kernel;
 
     }
