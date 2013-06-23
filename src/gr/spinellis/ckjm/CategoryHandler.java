@@ -206,7 +206,7 @@ public class CategoryHandler
         System.out.println("\nK = "+K+";\n");
         
         //TEST CPU VS GPU
-        int testCount = 10000;
+        int testCount = 100000;
         long start;
         long parallelTime;
         long serialTime;
@@ -274,16 +274,12 @@ public class CategoryHandler
         }
     }
     
-    /**
-     *
-     * @return
-     */
     public Kernel parallelFragm()
     {
-        final int n_$costant$ =   fragm.length;
-        final int catLen_$costant$ =  categories.length;
+        final int n =   fragm.length;
+        final int catLen =  categories.length;
         final short[] matrix2_$local$ = new short[matrix.length*matrix[0].length];
-        final float coeff2_$costant$ = (float) coeff;
+        final float coeff2 = (float) coeff;
         final double fragm2_$local$[] = new double[matrix.length];
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
@@ -291,7 +287,7 @@ public class CategoryHandler
             for (int j = 0; j < matrix[i].length; j++)
                 matrix2_$local$[i*matrix[0].length+j] = (short) matrix[i][j];
         
-        final int colLen_$costant$ = matrix[0].length;
+        final int colLen = matrix[0].length;
         
        
         Kernel kernel = new Kernel()
@@ -301,19 +297,19 @@ public class CategoryHandler
             {
                 int inputClassIdx = getGlobalId();
                 
-                if (inputClassIdx >= n_$costant$)
+                if (inputClassIdx >= n)
                     return;
                 
                 double itc = 0, itc_sqr = 0;
                 
-                for (int k = 0; k < catLen_$costant$; k++)
+                for (int k = 0; k < catLen; k++)
                 {
                     
-                    itc += matrix2_$local$[inputClassIdx*colLen_$costant$+k];
-                    itc_sqr += Math.pow(matrix2_$local$[inputClassIdx*colLen_$costant$+k], 2);
+                    itc += matrix2_$local$[inputClassIdx*colLen+k];
+                    itc_sqr += Math.pow(matrix2_$local$[inputClassIdx*colLen+k], 2);
                 }
                
-                fragm2_$local$[inputClassIdx] = coeff2_$costant$ * (itc/Math.sqrt(itc_sqr) - 1.0);
+                fragm2_$local$[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
                
             }
         };
