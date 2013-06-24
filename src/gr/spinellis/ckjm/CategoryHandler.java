@@ -18,8 +18,8 @@ public class CategoryHandler
     private Category[] categories;
     private int[][] matrix;
     private int[] tot;
-    private double[] fragm;
-    private double coeff;
+    private float[] fragm;
+    private float coeff;
     
     // same indexes
     private ArrayList<String> inputClassName;
@@ -200,10 +200,10 @@ public class CategoryHandler
         for (int i = 0; i < categories.length; i++)
             System.out.print(tot[i]+"\t");
         
-        fragm = new double[inputClassName.size()];
-        double K = categories.length;
+        fragm = new float[inputClassName.size()];
+        float K = categories.length;
         
-        coeff = 1.0 / ((int)Math.sqrt(K) - 1.0);
+        coeff = 1 / (((float)Math.sqrt(K)) - 1);
         
         System.out.println("\nK = "+K+";\n");
         
@@ -224,11 +224,8 @@ public class CategoryHandler
         float fragm2[] = parallelFragm();
 
         for (int i = 0; i < fragm.length; i++)
-            if (fragm[i] != fragm2[i])
-            {
-                System.out.println("\n***There is something wrong!!!***\n");
-                break;
-            }
+            if (!Float.isNaN(fragm[i]) && fragm[i] != fragm2[i])
+                System.out.println("Wrong values: "+fragm[i]+" vs "+fragm2[i]);
         
         // print results
 //        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
@@ -240,7 +237,7 @@ public class CategoryHandler
 //            for (int i = 0; i < space; i++)
 //                System.out.print(" ");
 //            
-//            if (!Double.isNaN(fragm[inputClassIdx]))
+//            if (!Float.isNaN(fragm[inputClassIdx]))
 //                System.out.println("\t"+fragm[inputClassIdx]+"\n");
 //            else
 //                System.out.println("\t[no categorized methods]\n");
@@ -254,7 +251,7 @@ public class CategoryHandler
     
     public void serialFragm()
     {
-        double itc, itc_sqr;
+        float itc, itc_sqr;
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
             itc = itc_sqr = 0;
@@ -265,7 +262,7 @@ public class CategoryHandler
                 itc_sqr += Math.pow(matrix[inputClassIdx][k], 2);
             }
             
-            fragm[inputClassIdx] = coeff * (itc/Math.sqrt(itc_sqr) - 1.0);
+            fragm[inputClassIdx] = coeff * (itc/((float)Math.sqrt(itc_sqr)) - 1);
         }
     }
     
@@ -299,7 +296,7 @@ public class CategoryHandler
                 
                 for (int k = 0; k < catLen; k++)
                 {
-                    float curr = matrix2[inputClassIdx*colLen+k];
+                    short curr = matrix2[inputClassIdx*colLen+k];
                     itc += curr;
                     itc_sqr += (curr*curr);
                 }
@@ -319,7 +316,7 @@ public class CategoryHandler
        
         
         if (!kernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
-            System.out.println("Kernel nid not execute on the GPU!");
+            System.out.println("Kernel did not execute on the GPU!");
         
         kernel.dispose();
         return fragm2;
