@@ -222,7 +222,7 @@ public class CategoryHandler
         float fragm2[] = parallelFragm();
 
         for (int i = 0; i < fragm.length; i++)
-            if (!Float.isNaN(fragm[i]) && fragm[i] != fragm2[i])
+            if (!Float.isNaN(fragm[i]) && Math.abs(fragm[i] - fragm2[i]) > 0.0000001)
                 System.out.println("Wrong values: "+fragm[i]+" vs "+fragm2[i]);
         
         // print results
