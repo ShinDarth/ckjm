@@ -9,6 +9,7 @@ import com.amd.aparapi.Device;
 import com.amd.aparapi.Kernel;
 import com.amd.aparapi.Kernel.EXECUTION_MODE;
 import java.util.ArrayList;
+import android.util.*;
 
 public class CategoryHandler
 {
@@ -18,7 +19,7 @@ public class CategoryHandler
     private int[][] matrix;
     private int[] tot;
     private double[] fragm;
-    double coeff;
+    private double coeff;
     
     // same indexes
     private ArrayList<String> inputClassName;
@@ -160,7 +161,7 @@ public class CategoryHandler
         
         for (int inputClassIdx = 0; inputClassIdx < inputClassName.size(); inputClassIdx++)
         {
-            //System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
+//          System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
             CalledClassPath[] classesWhichICall = calledClassesOfInputClass.get(inputClassIdx);
             
             for (int calledClassIdx = 0; calledClassIdx < classesWhichICall.length; calledClassIdx++)
@@ -185,7 +186,7 @@ public class CategoryHandler
 //            
 //            for (int k = 0; k < matrix[inputClassIdx].length; k++)
 //                System.out.print(matrix[inputClassIdx][k]+"\t");
-//            
+//           
 //            System.out.println();
         }
         
@@ -219,13 +220,8 @@ public class CategoryHandler
         
         serialTime = (System.nanoTime() - start)/testCount;
         
-        
         //Start GPU
         float fragm2[] = parallelFragm();
-        
-        
-        
-
 
         
         // print results
@@ -269,11 +265,12 @@ public class CategoryHandler
     
     public float[] parallelFragm()
     {
-        final int n =   (short) fragm.length;
+        final int n = (short) fragm.length;
         final int catLen =  (short) categories.length;
         final short[] matrix2 = new short[matrix.length*matrix[0].length];
         final float coeff2 = (float) coeff;
         final float fragm2[] = new float[matrix.length];
+        
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
@@ -283,8 +280,7 @@ public class CategoryHandler
         final int colLen = matrix[0].length;
         
        
-        Kernel kernel = new Kernel()
-              
+        Kernel kernel = new Kernel()     
         {
             @Override public void run()
             {
@@ -293,19 +289,19 @@ public class CategoryHandler
                 if (inputClassIdx >= n)
                     return;
                 
-                double itc = 0, itc_sqr = 0;
+                short itc = 0, itc_sqr = 0;
                 
                 for (int k = 0; k < catLen; k++)
                 {
-                    
-                    itc += matrix2[inputClassIdx*colLen+k];
-                    itc_sqr += Math.pow(matrix2[inputClassIdx*colLen+k], 2);
+                    float curr = matrix2[inputClassIdx*colLen+k];
+                    itc += curr;
+                    itc_sqr += (curr*curr);
                 }
                
-                fragm2[inputClassIdx] = (float) (coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0)+100);
-               
+                fragm2[inputClassIdx] = coeff2 * ((itc/FloatMath.sqrt(itc_sqr)) - 1);
             }
         };
+        
         double parallelTime;
         int testCount = 10000;
        
