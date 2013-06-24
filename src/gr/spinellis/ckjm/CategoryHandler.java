@@ -223,6 +223,12 @@ public class CategoryHandler
         //Start GPU
         float fragm2[] = parallelFragm();
 
+        for (int i = 0; i < fragm.length; i++)
+            if (fragm[i] != fragm2[i])
+            {
+                System.out.println("\n***There is something wrong!!!***\n");
+                break;
+            }
         
         // print results
 //        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
