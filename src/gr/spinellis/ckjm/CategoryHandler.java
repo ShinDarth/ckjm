@@ -7,6 +7,7 @@ package gr.spinellis.ckjm;
 
 import com.amd.aparapi.Device;
 import com.amd.aparapi.Kernel;
+import com.amd.aparapi.Kernel.EXECUTION_MODE;
 import java.util.ArrayList;
 
 public class CategoryHandler
@@ -206,14 +207,13 @@ public class CategoryHandler
         System.out.println("\nK = "+K+";\n");
         
         //TEST CPU VS GPU
-        int testCount = 100000;
-        long start;
-        long parallelTime;
-        long serialTime;
+        int testCount = 10000;
+        double start;
+        double serialTime;
         
         //start CPU
         start = System.nanoTime();    
-        
+    
         for (int i = 0; i < testCount; i++)
             serialFragm();
         
@@ -221,16 +221,9 @@ public class CategoryHandler
         
         
         //Start GPU
-        Kernel MyKernel = parallelFragm();
+        float fragm2[] = parallelFragm();
         
-        start = System.nanoTime();
-        MyKernel.execute(fragm.length, testCount);
-        parallelTime = (System.nanoTime() - start)/testCount;
         
-        MyKernel.dispose();
-        
-        if (!MyKernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
-            System.out.println("Kernel nid not execute on the GPU!");
         
 
 
@@ -251,8 +244,8 @@ public class CategoryHandler
 //                System.out.println("\t[no categorized methods]\n");
 //        }
         
-        System.out.println("Serial time: "+serialTime/1000+" ms");
-        System.out.println("Parallel time: "+parallelTime/1000+" ms");
+        System.out.println("Serial time: "+serialTime/1000000+" ms");
+       // System.out.println("Parallel time: "+parallelTime/1000+" ms");
         
         System.out.println("\n\n *** CategoryHandler process ends! ***\n");
     }
@@ -274,18 +267,18 @@ public class CategoryHandler
         }
     }
     
-    public Kernel parallelFragm()
+    public float[] parallelFragm()
     {
-        final int n =   fragm.length;
-        final int catLen =  categories.length;
-        final short[] matrix2_$local$ = new short[matrix.length*matrix[0].length];
+        final int n =   (short) fragm.length;
+        final int catLen =  (short) categories.length;
+        final short[] matrix2 = new short[matrix.length*matrix[0].length];
         final float coeff2 = (float) coeff;
-        final double fragm2_$local$[] = new double[matrix.length];
+        final float fragm2[] = new float[matrix.length];
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix2_$local$[i*matrix[0].length+j] = (short) matrix[i][j];
+                matrix2[i*matrix[0].length+j] = (short) matrix[i][j];
         
         final int colLen = matrix[0].length;
         
@@ -305,18 +298,29 @@ public class CategoryHandler
                 for (int k = 0; k < catLen; k++)
                 {
                     
-                    itc += matrix2_$local$[inputClassIdx*colLen+k];
-                    itc_sqr += Math.pow(matrix2_$local$[inputClassIdx*colLen+k], 2);
+                    itc += matrix2[inputClassIdx*colLen+k];
+                    itc_sqr += Math.pow(matrix2[inputClassIdx*colLen+k], 2);
                 }
                
-                fragm2_$local$[inputClassIdx] = coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0);
+                fragm2[inputClassIdx] = (float) (coeff2 * (itc/Math.sqrt(itc_sqr) - 1.0)+100);
                
             }
         };
-//       
+        double parallelTime;
+        int testCount = 10000;
+       
+        kernel.execute(fragm.length,testCount);
+    
+        parallelTime = kernel.getExecutionTime();
         
-        fragm = fragm2_$local$;
-        return kernel;
+        System.out.println("Parallel time: "+parallelTime/testCount+" ms");
+       
+        
+        if (!kernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
+            System.out.println("Kernel nid not execute on the GPU!");
+        
+        kernel.dispose();
+        return fragm2;
 
     }
     
