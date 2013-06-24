@@ -147,8 +147,6 @@ public class CategoryHandler
     
     public void process()
     {
-        System.out.println("\n\n *** CategoryHandler process starts! ***\n");
-        
         matrix = new int[inputClassName.size()][categories.length];
         tot = new int[categories.length];
         
@@ -245,8 +243,6 @@ public class CategoryHandler
         
         System.out.println("Serial time: "+serialTime/1000000+" ms");
        // System.out.println("Parallel time: "+parallelTime/1000+" ms");
-        
-        System.out.println("\n\n *** CategoryHandler process ends! ***\n");
     }
     
     public void serialFragm()
