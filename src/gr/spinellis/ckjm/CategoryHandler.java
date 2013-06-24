@@ -264,10 +264,10 @@ public class CategoryHandler
     
     public float[] parallelFragm()
     {
-        final int n = (short) fragm.length;
-        final int catLen =  (short) categories.length;
-        final short[] matrix2 = new short[matrix.length*matrix[0].length];
-        final float coeff2 = (float) coeff;
+        final int n = fragm.length;
+        final int catLen = categories.length;
+        final int[] matrix2 = new int[matrix.length*matrix[0].length];
+        final float coeff2 = coeff;
         final float fragm2[] = new float[matrix.length];
         
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
@@ -292,7 +292,7 @@ public class CategoryHandler
                 
                 for (int k = 0; k < catLen; k++)
                 {
-                    short curr = matrix2[inputClassIdx*colLen+k];
+                    int curr = matrix2[inputClassIdx*colLen+k];
                     itc += curr;
                     itc_sqr += (curr*curr);
                 }
