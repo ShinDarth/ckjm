@@ -205,12 +205,12 @@ public class CategoryHandler
         
         System.out.println("\nK = "+K+";\n");
         
-        //TEST CPU VS GPU
+        // TEST CPU VS GPU
         int testCount = 10000;
         double start;
         double serialTime;
         
-        //start CPU
+        // start CPU
         start = System.nanoTime();    
     
         for (int i = 0; i < testCount; i++)
@@ -218,9 +218,10 @@ public class CategoryHandler
         
         serialTime = (System.nanoTime() - start)/testCount;
         
-        //Start GPU
+        // start GPU
         float fragm2[] = parallelFragm();
-
+        
+        // check values
         for (int i = 0; i < fragm.length; i++)
             if (!Float.isNaN(fragm[i]) && Math.abs(fragm[i] - fragm2[i]) > 0.0001)
                 System.out.println("Wrong values: "+fragm[i]+" vs "+fragm2[i]);
@@ -242,7 +243,6 @@ public class CategoryHandler
 //        }
         
         System.out.println("Serial time: "+serialTime/1000000+" ms");
-       // System.out.println("Parallel time: "+parallelTime/1000+" ms");
     }
     
     public void serialFragm()
@@ -273,7 +273,7 @@ public class CategoryHandler
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix2[i*matrix[0].length+j] = (short) matrix[i][j];
+                matrix2[i*matrix[0].length+j] = matrix[i][j];
         
         final int colLen = matrix[0].length;
         
