@@ -207,7 +207,7 @@ public class CategoryHandler
         System.out.println("\nK = "+K+";\n");
         
         // TEST CPU VS GPU
-        int testCount = 100;
+        int testCount = 10000;
         double start;
         double serialTime;
         
@@ -275,9 +275,7 @@ public class CategoryHandler
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
                 matrix2_$costant$[i*matrix[0].length+j] = matrix[i][j];
-        
-        
-        
+
        
         Kernel kernel = new Kernel()     
         {
@@ -304,36 +302,24 @@ public class CategoryHandler
             }
         };
         
+
         double parallelTime;
         int testCount = 10000;
-        int bsize = 1024;
-        int nb;
         
-        if (fragm.length <= bsize)
-            nb = bsize;
-        else
-        {
-            nb = bsize;
-            while (nb < fragm.length)
-                nb += bsize;
-        }
-        System.out.println(nb);
-        kernel.execute(Range.create(nb,bsize),testCount);
+        kernel.execute(Range.create(n_$costant$),testCount);
        
-       // nb%bsize == 0;
         parallelTime = kernel.getExecutionTime() - kernel.getConversionTime();
         
         System.out.println("Parallel time: "+parallelTime/testCount+" ms");
         
         kernel.setExecutionMode(EXECUTION_MODE.CPU);
-        kernel.execute(fragm.length,testCount);
+        kernel.execute(Range.create(n_$costant$),testCount);
         
-        parallelTime = kernel.getExecutionTime();
+        parallelTime = kernel.getExecutionTime() - kernel.getConversionTime();
         
         System.out.println("Parallel with CPU time: "+parallelTime/testCount+" ms");
         
-        if (!kernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
-            System.out.println("Kernel did not execute on the GPU!");
+      
         
         kernel.dispose();
         return fragm2;
