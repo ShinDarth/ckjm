@@ -206,7 +206,7 @@ public class CategoryHandler
         System.out.println("\nK = "+K+";\n");
         
         // TEST CPU VS GPU
-        int testCount = 10000;
+        int testCount = 100000;
         double start;
         double serialTime;
         
@@ -301,14 +301,20 @@ public class CategoryHandler
         };
         
         double parallelTime;
-        int testCount = 10000;
+        int testCount = 100000;
        
         kernel.execute(fragm.length,testCount);
-    
+ 
         parallelTime = kernel.getExecutionTime();
         
         System.out.println("Parallel time: "+parallelTime/testCount+" ms");
-       
+        
+        kernel.setExecutionMode(EXECUTION_MODE.CPU);
+        kernel.execute(fragm.length,testCount);
+        
+        parallelTime = kernel.getExecutionTime();
+        
+        System.out.println("Parallel with CPU time: "+parallelTime/testCount+" ms");
         
         if (!kernel.getExecutionMode().equals(Kernel.EXECUTION_MODE.GPU))
             System.out.println("Kernel did not execute on the GPU!");
