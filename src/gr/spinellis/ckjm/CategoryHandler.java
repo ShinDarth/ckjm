@@ -10,6 +10,7 @@ import com.amd.aparapi.Kernel;
 import com.amd.aparapi.Kernel.EXECUTION_MODE;
 import java.util.ArrayList;
 import android.util.*;
+import com.amd.aparapi.Range;
 
 public class CategoryHandler
 {
@@ -206,7 +207,7 @@ public class CategoryHandler
         System.out.println("\nK = "+K+";\n");
         
         // TEST CPU VS GPU
-        int testCount = 100000;
+        int testCount = 100;
         double start;
         double serialTime;
         
@@ -264,18 +265,18 @@ public class CategoryHandler
     
     public float[] parallelFragm()
     {
-        final int n = fragm.length;
-        final int[] matrix2 = new int[matrix.length*matrix[0].length];
-        final float coeff2 = coeff;
+        final int n_$costant$ = fragm.length;
+        final int[] matrix2_$costant$ = new int[matrix.length*matrix[0].length];
+        final float coeff2_$costant$ = coeff;
         final float fragm2[] = new float[matrix.length];
-        
+        final int colLen_$costant$ = matrix[0].length;
         System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix2[i*matrix[0].length+j] = matrix[i][j];
+                matrix2_$costant$[i*matrix[0].length+j] = matrix[i][j];
         
-        final int colLen = matrix[0].length;
+        
         
        
         Kernel kernel = new Kernel()     
@@ -284,28 +285,43 @@ public class CategoryHandler
             {
                 int inputClassIdx = getGlobalId();
                 
-                if (inputClassIdx >= n)
+                if (inputClassIdx >= n_$costant$)
                     return;
                 
                 int itc = 0, itc_sqr = 0;
-                
-                for (int k = 0; k < colLen; k++)
+              
+
+                for (int k = 0; k < colLen_$costant$; k++)
                 {
-                    int curr = matrix2[inputClassIdx*colLen+k];
+                    int curr = matrix2_$costant$[inputClassIdx*colLen_$costant$+k];
+                  
                     itc += curr;
                     itc_sqr += (curr*curr);
+                   
                 }
                
-                fragm2[inputClassIdx] = coeff2 * ((itc/FloatMath.sqrt(itc_sqr)) - 1);
+                fragm2[inputClassIdx] = coeff2_$costant$ * ((itc/FloatMath.sqrt(itc_sqr)) - 1);
             }
         };
         
         double parallelTime;
-        int testCount = 100000;
+        int testCount = 10000;
+        int bsize = 1024;
+        int nb;
+        
+        if (fragm.length <= bsize)
+            nb = bsize;
+        else
+        {
+            nb = bsize;
+            while (nb < fragm.length)
+                nb += bsize;
+        }
+        System.out.println(nb);
+        kernel.execute(Range.create(nb,bsize),testCount);
        
-        kernel.execute(fragm.length,testCount);
- 
-        parallelTime = kernel.getExecutionTime();
+       // nb%bsize == 0;
+        parallelTime = kernel.getExecutionTime() - kernel.getConversionTime();
         
         System.out.println("Parallel time: "+parallelTime/testCount+" ms");
         
