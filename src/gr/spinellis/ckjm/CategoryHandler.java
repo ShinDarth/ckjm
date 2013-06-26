@@ -315,7 +315,7 @@ public class CategoryHandler
         kernel.setExecutionMode(EXECUTION_MODE.CPU);
         kernel.execute(Range.create(n_$costant$),testCount);
         
-        parallelTime = kernel.getExecutionTime() - kernel.getConversionTime();
+        parallelTime = kernel.getExecutionTime();
         
         System.out.println("Parallel with CPU time: "+parallelTime/testCount+" ms");
         
