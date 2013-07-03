@@ -160,7 +160,7 @@ public class CategoryHandler
         
         for (int inputClassIdx = 0; inputClassIdx < inputClassName.size(); inputClassIdx++)
         {
-//          System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
+          System.out.print("Processing \""+inputClassName.get(inputClassIdx)+"\"...");
             CalledClassPath[] classesWhichICall = calledClassesOfInputClass.get(inputClassIdx);
             
             for (int calledClassIdx = 0; calledClassIdx < classesWhichICall.length; calledClassIdx++)
@@ -178,15 +178,15 @@ public class CategoryHandler
             
             // print results
             int spaces = maxNameLength - inputClassName.get(inputClassIdx).length();
-//            for (int i = 0; i < spaces; i++)
-//                System.out.print(" ");
-//            
-//            System.out.print("\t\t  ");
-//            
-//            for (int k = 0; k < matrix[inputClassIdx].length; k++)
-//                System.out.print(matrix[inputClassIdx][k]+"\t");
-//           
-//            System.out.println();
+            for (int i = 0; i < spaces; i++)
+                System.out.print(" ");
+            
+            System.out.print("\t\t  ");
+            
+            for (int k = 0; k < matrix[inputClassIdx].length; k++)
+                System.out.print(matrix[inputClassIdx][k]+"\t");
+           
+            System.out.println();
         }
         
         System.out.println();
@@ -202,48 +202,36 @@ public class CategoryHandler
         fragm = new float[inputClassName.size()];
         float K = categories.length;
         
-        coeff = 1 / (((float)Math.sqrt(K)) - 1);
-        
-        System.out.println("\nK = "+K+";\n");
-        
-        // TEST CPU VS GPU
-        int testCount = 10000;
-        double start;
-        double serialTime;
-        
-        // start CPU
-        start = System.nanoTime();    
+        coeff = 1 / (((float)Math.sqrt(K)) - 1);  
     
-        for (int i = 0; i < testCount; i++)
-            serialFragm();
+        // Serial CPU
+        serialFragm();
         
-        serialTime = (System.nanoTime() - start)/testCount;
-        
-        // start GPU
+        // OpenCL
+        /*
         float fragm2[] = parallelFragm();
         
         // check values
         for (int i = 0; i < fragm.length; i++)
             if (!Float.isNaN(fragm[i]) && Math.abs(fragm[i] - fragm2[i]) > 0.0001)
                 System.out.println("Wrong values: "+fragm[i]+" vs "+fragm2[i]);
+        // */
         
         // print results
-//        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
-//        {
-//            System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
-//            
-//            // output format
-//            int space = maxNameLength - inputClassName.get(inputClassIdx).length();
-//            for (int i = 0; i < space; i++)
-//                System.out.print(" ");
-//            
-//            if (!Float.isNaN(fragm[inputClassIdx]))
-//                System.out.println("\t"+fragm[inputClassIdx]+"\n");
-//            else
-//                System.out.println("\t[no categorized methods]\n");
-//        }
-        
-        System.out.println("Serial time: "+serialTime/1000000+" ms");
+        for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
+        {
+            System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
+            
+            // output format
+            int space = maxNameLength - inputClassName.get(inputClassIdx).length();
+            for (int i = 0; i < space; i++)
+                System.out.print(" ");
+            
+            if (!Float.isNaN(fragm[inputClassIdx]))
+                System.out.println("\t"+fragm[inputClassIdx]+"\n");
+            else
+                System.out.println("\t[no categorized methods]\n");
+        }
     }
     
     public void serialFragm()
