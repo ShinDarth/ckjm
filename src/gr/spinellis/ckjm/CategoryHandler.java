@@ -199,6 +199,8 @@ public class CategoryHandler
         for (int i = 0; i < categories.length; i++)
             System.out.print(tot[i]+"\t");
         
+        System.out.println("\n");
+        
         fragm = new float[inputClassName.size()];
         float K = categories.length;
         
@@ -217,20 +219,22 @@ public class CategoryHandler
                 System.out.println("Wrong values: "+fragm[i]+" vs "+fragm2[i]);
         // */
         
+        System.out.println("\t\tClasses with fragm:\n");
+        
         // print results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
-            System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
-            
-            // output format
-            int space = maxNameLength - inputClassName.get(inputClassIdx).length();
-            for (int i = 0; i < space; i++)
-                System.out.print(" ");
-            
-            if (!Float.isNaN(fragm[inputClassIdx]))
+            if (!Float.isNaN(fragm[inputClassIdx]) && fragm[inputClassIdx] != 0)
+            {
+                System.out.print("fragm("+inputClassName.get(inputClassIdx)+"):");
+
+                // output format
+                int space = maxNameLength - inputClassName.get(inputClassIdx).length();
+                for (int i = 0; i < space; i++)
+                    System.out.print(" ");
+                
                 System.out.println("\t"+fragm[inputClassIdx]+"\n");
-            else
-                System.out.println("\t[no categorized methods]\n");
+            }
         }
     }
     
