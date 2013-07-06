@@ -262,13 +262,11 @@ public class CategoryHandler
         final float coeff2_$costant$ = coeff;
         final float fragm2[] = new float[matrix.length];
         final int colLen_$costant$ = matrix[0].length;
-        System.out.println(fragm.length+" "+matrix.length*matrix[0].length);
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
                 matrix2_$costant$[i*matrix[0].length+j] = matrix[i][j];
 
-       
         Kernel kernel = new Kernel()     
         {
             @Override public void run()
@@ -279,7 +277,6 @@ public class CategoryHandler
                     return;
                 
                 int itc = 0, itc_sqr = 0;
-              
 
                 for (int k = 0; k < colLen_$costant$; k++)
                 {
@@ -287,35 +284,17 @@ public class CategoryHandler
                   
                     itc += curr;
                     itc_sqr += (curr*curr);
-                   
                 }
                
                 fragm2[inputClassIdx] = coeff2_$costant$ * ((itc/FloatMath.sqrt(itc_sqr)) - 1);
             }
         };
         
-
-        double parallelTime;
-        int testCount = 10000;
-        
-        kernel.execute(Range.create(n_$costant$),testCount);
-       
-        parallelTime = kernel.getExecutionTime() - kernel.getConversionTime();
-        
-        System.out.println("Parallel time: "+parallelTime/testCount+" ms");
-        
         kernel.setExecutionMode(EXECUTION_MODE.CPU);
-        kernel.execute(Range.create(n_$costant$),testCount);
-        
-        parallelTime = kernel.getExecutionTime();
-        
-        System.out.println("Parallel with CPU time: "+parallelTime/testCount+" ms");
-        
-      
+        kernel.execute(Range.create(n_$costant$));
         
         kernel.dispose();
         return fragm2;
-
     }
     
     public int getMaxNameLength()
