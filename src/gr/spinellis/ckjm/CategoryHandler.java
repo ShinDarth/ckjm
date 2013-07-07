@@ -225,6 +225,30 @@ public class CategoryHandler
         
         System.out.println("\t\tClasses with fragm:\n");
         
+        // descending sort
+        float tmpFragm;
+        String tmpName;
+        int max;
+        
+	for (int index = 0; index < fragm.length-1; index++)
+	{
+		max = index;
+                
+		for (int i = index+1; i < fragm.length; i++)
+			if (fragm[i] > fragm[max])
+				max = i;
+                
+                // swap name and value
+		tmpFragm = fragm[index];
+                tmpName = inputClassName.get(index);
+                
+                inputClassName.set(index, inputClassName.get(max));
+                fragm[index] = fragm[max];
+                
+                inputClassName.set(max, tmpName);
+                fragm[max] = tmpFragm;
+	}
+        
         // print fragm results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
