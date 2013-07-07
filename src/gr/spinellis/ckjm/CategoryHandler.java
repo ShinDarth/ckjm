@@ -25,13 +25,17 @@ public class CategoryHandler
     // same indexes
     private ArrayList<String> inputClassName;
     private ArrayList<CalledClassPath[]> calledClassesOfInputClass;
+    
+    ClassMetricsContainer cmc;
             
     private CategoryHandler()
     {
         inputClassName = new ArrayList<String>();
         calledClassesOfInputClass = new ArrayList<CalledClassPath[]>();
+        cmc = ClassMetricsContainer.getCMC();
         cfg();
     }
+    
     public static CategoryHandler getCategoryHandler() { return ch; }
     
     // add input classes
@@ -176,7 +180,7 @@ public class CategoryHandler
                 }
             }
             
-            // print results
+            // print categories datas
             int spaces = maxNameLength - inputClassName.get(inputClassIdx).length();
             for (int i = 0; i < spaces; i++)
                 System.out.print(" ");
@@ -221,7 +225,7 @@ public class CategoryHandler
         
         System.out.println("\t\tClasses with fragm:\n");
         
-        // print results
+        // print fragm results
         for (int inputClassIdx = 0; inputClassIdx < fragm.length; inputClassIdx++)
         {
             if (!Float.isNaN(fragm[inputClassIdx]) && fragm[inputClassIdx] != 0)
@@ -233,7 +237,7 @@ public class CategoryHandler
                 for (int i = 0; i < space; i++)
                     System.out.print(" ");
                 
-                System.out.println("\t"+fragm[inputClassIdx]+"\n");
+                System.out.println("\t"+fragm[inputClassIdx]+"\t{CBO: "+cmc.getMetrics(inputClassName.get(inputClassIdx)).getCbo()+"}\n");
             }
         }
     }
