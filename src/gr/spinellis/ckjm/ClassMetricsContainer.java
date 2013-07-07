@@ -31,7 +31,12 @@ import java.io.*;
  * @version $Revision: 1.9 $
  * @author <a href="http://www.spinellis.gr">Diomidis Spinellis</a>
  */
-class ClassMetricsContainer {
+class ClassMetricsContainer
+{
+    // Shin && Giga works: singletoned
+    private static ClassMetricsContainer cmc = new ClassMetricsContainer();
+    public static ClassMetricsContainer getCMC()    { return cmc; }
+    private ClassMetricsContainer() {}
 
     /** The map from class names to the corresponding metrics */
     private HashMap<String, ClassMetrics> m = new HashMap<String, ClassMetrics>();

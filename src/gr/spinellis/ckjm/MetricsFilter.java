@@ -77,27 +77,12 @@ public class MetricsFilter {
 	}
     }
 
-    /**
-     * The interface for other Java based applications.
-     * Implement the outputhandler to catch the results
-     *
-     * @param files Class files to be analyzed
-     * @param outputHandler An implementation of the CkjmOutputHandler interface
-     */
-    public static void runMetrics(String[] files, CkjmOutputHandler outputHandler) {
-        ClassMetricsContainer cm = new ClassMetricsContainer();
-
-        for (int i = 0; i < files.length; i++)
-            processClass(cm, files[i]);
-        cm.printMetrics(outputHandler);
-    }
-
     /** The filter's main body.
      * Process command line arguments and the standard input.
      */
     public static void main(String[] argv) {
 	int argp = 0;
-        ClassMetricsContainer cm = new ClassMetricsContainer();
+        ClassMetricsContainer cm = ClassMetricsContainer.getCMC();
         
         // Shin && Giga works
         if (argv.length > 0 && argv[argp].startsWith("-c"))
